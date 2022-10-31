@@ -16,6 +16,7 @@
 	 		<!-- Entity classes --> 
 	        <class>gei.id.tutelado.model.Usuario</class>
 	        <class>gei.id.tutelado.model.EntradaLog</class>
+	        <class>gei.id.tutelado.model.Persona</class>
        
 	        <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
