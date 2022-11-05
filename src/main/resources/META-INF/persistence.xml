@@ -17,6 +17,10 @@
 	        <class>gei.id.tutelado.model.Usuario</class>
 	        <class>gei.id.tutelado.model.EntradaLog</class>
 	        <class>gei.id.tutelado.model.Persona</class>
+	        <class>gei.id.tutelado.model.Empleado</class>
+	        <class>gei.id.tutelado.model.Peregrino</class>
+	        <class>gei.id.tutelado.model.Reserva</class>
+	        <class>gei.id.tutelado.model.Albergue</class>
        
 	        <exclude-unlisted-classes>true</exclude-unlisted-classes>
 

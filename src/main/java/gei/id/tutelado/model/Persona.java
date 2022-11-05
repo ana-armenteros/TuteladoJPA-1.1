@@ -1,5 +1,7 @@
 package gei.id.tutelado.model;
 
+import java.util.Objects;
+
 import javax.persistence.*;
 
 @TableGenerator(name="generadorIdsPersonas", table="tabla_ids",
@@ -99,29 +101,55 @@ public class Persona {
 		this.email = email;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((nif == null) ? 0 : nif.hashCode());
-		return result;
+	public Persona id(Long id) {
+		setId(id);
+		return this;
+	}
+
+	public Persona nif(String nif) {
+		setNif(nif);
+		return this;
+	}
+
+	public Persona nombre(String nombre) {
+		setNombre(nombre);
+		return this;
+	}
+
+	public Persona apellido(String apellido) {
+		setApellido(apellido);
+		return this;
+	}
+
+	public Persona nacionalidad(String nacionalidad) {
+		setNacionalidad(nacionalidad);
+		return this;
+	}
+
+	public Persona telefono(String telefono) {
+		setTelefono(telefono);
+		return this;
+	}
+
+	public Persona email(String email) {
+		setEmail(email);
+		return this;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (!(o instanceof Persona)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Persona other = (Persona) obj;
-		if (nif == null) {
-			if (other.nif != null)
-				return false;
-		} else if (!nif.equals(other.nif))
-			return false;
-		return true;
+		}
+		Persona persona = (Persona) o;
+		return Objects.equals(id, persona.id) && Objects.equals(nif, persona.nif) && Objects.equals(nombre, persona.nombre) && Objects.equals(apellido, persona.apellido) && Objects.equals(nacionalidad, persona.nacionalidad) && Objects.equals(telefono, persona.telefono) && Objects.equals(email, persona.email);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, nif, nombre, apellido, nacionalidad, telefono, email);
 	}
 
 	@Override
@@ -136,4 +164,5 @@ public class Persona {
 			", email='" + getEmail() + "'" +
 			"}";
 	}
+
 }
