@@ -1,7 +1,5 @@
 package gei.id.tutelado.model;
 
-import java.util.Objects;
-
 import javax.persistence.*;
 
 @TableGenerator(name="generadorIdsPersonas", table="tabla_ids",
@@ -137,32 +135,36 @@ public class Persona {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (!(o instanceof Persona)) {
-			return false;
-		}
-		Persona persona = (Persona) o;
-		return Objects.equals(id, persona.id) && Objects.equals(nif, persona.nif) && Objects.equals(nombre, persona.nombre) && Objects.equals(apellido, persona.apellido) && Objects.equals(nacionalidad, persona.nacionalidad) && Objects.equals(telefono, persona.telefono) && Objects.equals(email, persona.email);
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((nif == null) ? 0 : nif.hashCode());
+		return result;
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(id, nif, nombre, apellido, nacionalidad, telefono, email);
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Persona other = (Persona) obj;
+		if (nif == null) {
+			if (other.nif != null)
+				return false;
+		} else if (!nif.equals(other.nif))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "{" +
-			" id='" + getId() + "'" +
-			", nif='" + getNif() + "'" +
-			", nombre='" + getNombre() + "'" +
-			", apellido='" + getApellido() + "'" +
-			", nacionalidad='" + getNacionalidad() + "'" +
-			", telefono='" + getTelefono() + "'" +
-			", email='" + getEmail() + "'" +
-			"}";
+		return "Persona [id=" + id + ", nif=" + nif + ", nombre=" + nombre +
+			", apellido=" + apellido + ", nacionalidad=" + nacionalidad + 
+			", telefono=" + telefono + "email=" + email + "]";
 	}
+
 
 }

@@ -1,9 +1,8 @@
 package gei.id.tutelado.model;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.*;
 
@@ -22,7 +21,7 @@ initialValue=0, allocationSize=1)
 @Entity
 public class Reserva {
     @Id
-    @GeneratedValue (generator="generadorIdsCodigos")
+    @GeneratedValue (generator="generadorIdsReservas")
     private Long id;
 
     
@@ -35,14 +34,22 @@ public class Reserva {
     @Column(nullable = false, unique = false)
     private LocalDate fechaSalida;
 
-    @ManyToOne (cascade={}, fetch=FetchType.EAGER)
+    /*	Propagación automática de PERSIST:
+		- Una reserva no puede existir sin que exista un albergue al que estar asociada.
+		- Si se persiste una reserva, el albergue al que se asocia debe persistirse también.
+    */
+    @ManyToOne (fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
     @JoinColumn (nullable=false, unique=false)
     private Albergue albergue;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {}) 
+    /*	Propagación automática de PERSIST:
+		- Una reserva no puede existir sin que exista el/los peregrinos a los que estar asociada.
+		- Si se persiste una reserva, el/los peregrinos a los que se asocia deben persistirse también.
+    */
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST}) 
     @JoinTable (name = "t_reservas_peregrinos",
             joinColumns = @JoinColumn(name = "reserva_id"))
-    private Set<Peregrino> peregrinos = new HashSet<Peregrino>();
+    private Set<Peregrino> peregrinos = new TreeSet<Peregrino>();
 
     public Long getId() {
         return this.id;
@@ -96,32 +103,45 @@ public class Reserva {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Reserva)) {
-            return false;
-        }
-        Reserva reserva = (Reserva) o;
-        return Objects.equals(id, reserva.id) && Objects.equals(codigo, reserva.codigo) 
-        && Objects.equals(fechaEntrada, reserva.fechaEntrada) 
-        && Objects.equals(fechaSalida, reserva.fechaSalida);
+    public Albergue getAlbergue() {
+        return this.albergue;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, codigo, fechaEntrada, fechaSalida);
+    public void setAlbergue(Albergue albergue) {
+        this.albergue = albergue;
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Reserva other = (Reserva) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
+	}
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", codigo='" + getCodigo() + "'" +
-            ", fechaEntrada='" + getFechaEntrada() + "'" +
-            ", fechaSalida='" + getFechaSalida() + "'" +
-            "}";
+        return "[id=" + id + ", codigo=" + codigo + ", fechaEntrada=" +
+            fechaEntrada + ", fechaSalida=" + fechaSalida +
+            ", albergue=" + albergue + ", peregrinos=" + peregrinos + "]";
     }
+
 
 }

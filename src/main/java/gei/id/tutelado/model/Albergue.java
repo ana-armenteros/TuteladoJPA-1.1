@@ -1,7 +1,5 @@
 package gei.id.tutelado.model;
 
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -49,13 +47,25 @@ public class Albergue {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable (name="t_albergue_servicios", joinColumns = @JoinColumn(name = "albergue_id"))
     @Column (name = "servicio") 
-    private Set<String> servicios = new HashSet<String>();
+    private Set<String> servicios = new TreeSet<String>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {}) 
+    /*	Propagación automática de REMOVE:
+		- Una reserva no puede existir sin que exista un albergue al que estar asociada.
+		- Si se borra un albergue, deberán borrarse las reservas asociadas al mismo.
+    */
+    @OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE}) 
     @JoinTable (name = "t_reservas_albergues",
             joinColumns = @JoinColumn(name = "albergue_id"),
             inverseJoinColumns = @JoinColumn(name = "reserva_id"))
-    private Set<Reserva> reservas = new HashSet<Reserva>();
+    @OrderBy("fechaEntrada")
+    private SortedSet<Reserva> reservas = new TreeSet<Reserva>();
+
+	public void anadirReserva(Reserva reserva) {
+		if (reserva.getAlbergue() != null) throw new RuntimeException ("La reserva ya está añadida al albergue");
+		reserva.setAlbergue(this);
+		this.reservas.add(reserva);
+	}
+
 
     public Long getId() {
         return this.id;
@@ -125,37 +135,45 @@ public class Albergue {
         this.servicios = servicios;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Albergue)) {
-            return false;
-        }
-        Albergue albergue = (Albergue) o;
-        return Objects.equals(id, albergue.id) && Objects.equals(cru, albergue.cru) 
-        && Objects.equals(nombre, albergue.nombre) && Objects.equals(poblacion, albergue.poblacion) 
-        && Objects.equals(camino, albergue.camino) && Objects.equals(etapa, albergue.etapa) 
-        && Objects.equals(disponible, albergue.disponible) && Objects.equals(servicios, albergue.servicios);
+    public SortedSet<Reserva> getReservas() {
+        return this.reservas;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cru, nombre, poblacion, camino, etapa, disponible, servicios);
+    public void setReservas(SortedSet<Reserva> reservas) {
+        this.reservas = reservas;
     }
+
+
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cru == null) ? 0 : cru.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Albergue other = (Albergue) obj;
+		if (cru == null) {
+			if (other.cru != null)
+				return false;
+		} else if (!cru.equals(other.cru))
+			return false;
+		return true;
+	}
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + id + "'" +
-            ", cru='" + cru + "'" +
-            ", nombre='" + nombre + "'" +
-            ", poblacion='" + poblacion + "'" +
-            ", camino='" + camino + "'" +
-            ", etapa='" + etapa + "'" +
-            ", disponible='" + disponible + "'" +
-            ", servicios='" + servicios + "'" +
-            "}";
+        return "Albergue [id=" + id + ", cru=" + cru + ", nombre=" + nombre +
+         ", poblacion=" + poblacion + ", camino=" + camino + ", etapa=" + etapa + 
+         ", disponible=" + disponible + ", servicios=" + servicios + ", reservas=" + reservas + "]";
     }
 
 }
