@@ -9,8 +9,8 @@ public interface PersonaDao {
 	void setup (Configuracion config);
 	
 	Persona almacena (Persona persona);
-	Persona modifica (Persona log);
-	void elimina (Persona log);
+	Persona modifica (Persona persona);
+	void elimina (Persona persona);
 	Persona recuperaPorNif (String nif);
 
 }
