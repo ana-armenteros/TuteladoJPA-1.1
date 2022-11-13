@@ -27,19 +27,40 @@ public class Empleado extends Persona {
         this.puesto = puesto;
     }
 
-    public Empleado id(Long id) {
-        setId(id);
-        return this;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((nss == null) ? 0 : nss.hashCode());
+        result = prime * result + ((puesto == null) ? 0 : puesto.hashCode());
+        return result;
     }
 
-    public Empleado nss(String nss) {
-        setNss(nss);
-        return this;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Empleado other = (Empleado) obj;
+        if (nss == null) {
+            if (other.nss != null)
+                return false;
+        } else if (!nss.equals(other.nss))
+            return false;
+        if (puesto == null) {
+            if (other.puesto != null)
+                return false;
+        } else if (!puesto.equals(other.puesto))
+            return false;
+        return true;
     }
 
-    public Empleado puesto(String puesto) {
-        setPuesto(puesto);
-        return this;
+    @Override
+    public String toString() {
+        return super.toString() + "is a Empleado [nss=" + nss + ", puesto=" + puesto + "]";
     }
 
 }

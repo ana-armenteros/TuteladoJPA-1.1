@@ -32,4 +32,40 @@ public class Peregrino extends Persona {
         this.limitacionFisica = limitacionFisica;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((medio == null) ? 0 : medio.hashCode());
+        result = prime * result + ((limitacionFisica == null) ? 0 : limitacionFisica.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Peregrino other = (Peregrino) obj;
+        if (medio == null) {
+            if (other.medio != null)
+                return false;
+        } else if (!medio.equals(other.medio))
+            return false;
+        if (limitacionFisica == null) {
+            if (other.limitacionFisica != null)
+                return false;
+        } else if (!limitacionFisica.equals(other.limitacionFisica))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "is a Peregrino [medio=" + medio + ", limitacionFisica=" + limitacionFisica + "]";
+    }
+
 }
