@@ -37,9 +37,12 @@ public class Reserva {
     /*	Propagación automática de PERSIST:
 		- Una reserva no puede existir sin que exista un albergue al que estar asociada.
 		- Si se persiste una reserva, el albergue al que se asocia debe persistirse también.
+    
+        Lado PROPIETARIO de la asociación bidireccional
+        - Incluye la clave foranea que apunta a Albergue
     */
     @ManyToOne (fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
-    @JoinColumn (nullable=false, unique=false)
+    @JoinColumn (name= "fk_Albergue_Reserva", nullable=false, unique=false)
     private Albergue albergue;
 
     /*	Propagación automática de PERSIST:
@@ -81,26 +84,6 @@ public class Reserva {
 
     public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
-    }
-
-    public Reserva id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Reserva codigo(String codigo) {
-        setCodigo(codigo);
-        return this;
-    }
-
-    public Reserva fechaEntrada(LocalDate fechaEntrada) {
-        setFechaEntrada(fechaEntrada);
-        return this;
-    }
-
-    public Reserva fechaSalida(LocalDate fechaSalida) {
-        setFechaSalida(fechaSalida);
-        return this;
     }
 
     public Albergue getAlbergue() {

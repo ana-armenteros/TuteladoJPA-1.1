@@ -52,21 +52,25 @@ public class Albergue {
     /*	Propagación automática de REMOVE:
 		- Una reserva no puede existir sin que exista un albergue al que estar asociada.
 		- Si se borra un albergue, deberán borrarse las reservas asociadas al mismo.
+
+        Lado INVERSO de la asociacion
+        -Dentro del mappedBy() nombe del atributo de la clase propietaria (Albergue)
+
+        NOTA: necesitamos el @OrderBy aunque la coleccion esté definida como LAZY por si en 
+        algun momento accedemos a la propiedad DENTRO de sesión, por defecto orden ASC
     */
-    @OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.REMOVE}) 
-    @JoinTable (name = "t_reservas_albergues",
-            joinColumns = @JoinColumn(name = "albergue_id"),
-            inverseJoinColumns = @JoinColumn(name = "reserva_id"))
+    @OneToMany(mappedBy = "albergue", fetch = FetchType.LAZY, cascade={CascadeType.REMOVE}) 
     @OrderBy("fechaEntrada")
     private SortedSet<Reserva> reservas = new TreeSet<Reserva>();
 
+    // Metodo de conveniencia para asegurarnos de que actualizamos ambos extremos
 	public void anadirReserva(Reserva reserva) {
-		if (reserva.getAlbergue() != null) throw new RuntimeException ("La reserva ya está añadida al albergue");
+		if (reserva.getAlbergue() != null) 
+            throw new RuntimeException ("La reserva ya ha sido añadida a este albergue");
 		reserva.setAlbergue(this);
 		this.reservas.add(reserva);
 	}
-
-
+    
     public Long getId() {
         return this.id;
     }
