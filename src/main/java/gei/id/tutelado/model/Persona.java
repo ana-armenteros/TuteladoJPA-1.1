@@ -20,7 +20,7 @@ initialValue=0, allocationSize=1)
 		- Las subclases tienen atributos obligatorios -> se descarta tabla por jerarquía.
 */
 @Inheritance (strategy = InheritanceType.TABLE_PER_CLASS)
-public class Persona {
+public abstract class Persona {
     @Id
     @GeneratedValue (generator="generadorIdsPersonas")
     private Long id;
@@ -97,41 +97,6 @@ public class Persona {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Persona id(Long id) {
-		setId(id);
-		return this;
-	}
-
-	public Persona nif(String nif) {
-		setNif(nif);
-		return this;
-	}
-
-	public Persona nombre(String nombre) {
-		setNombre(nombre);
-		return this;
-	}
-
-	public Persona apellido(String apellido) {
-		setApellido(apellido);
-		return this;
-	}
-
-	public Persona nacionalidad(String nacionalidad) {
-		setNacionalidad(nacionalidad);
-		return this;
-	}
-
-	public Persona telefono(String telefono) {
-		setTelefono(telefono);
-		return this;
-	}
-
-	public Persona email(String email) {
-		setEmail(email);
-		return this;
 	}
 
 	@Override
