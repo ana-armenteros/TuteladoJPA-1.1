@@ -1,5 +1,6 @@
 package gei.id.tutelado;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,8 +27,8 @@ public class ProductorDatosPrueba {
 	public List<Albergue> listaAlbergues;
 	public Set<String> listaServiciosa0, listaServiciosa1;
 
-	/*public Reserva r0, r1;
-	public List<Reserva> listaReservas;*/
+	public Reserva r0, r1, r2;
+	public List<Reserva> listaReservas;
 	
 	public void Setup (Configuracion config) {
 		this.emf=(EntityManagerFactory) config.get("EMF");
@@ -106,6 +107,7 @@ public class ProductorDatosPrueba {
 		this.listaServiciosa1.add("Cocina compartida");
 
 		// Crea dos albergues EN MEMORIA: a0,a1
+		// Sin reservas asignadas
 
 		this.a0 = new Albergue();
 		this.a0.setCru("12345678912345");
@@ -128,6 +130,44 @@ public class ProductorDatosPrueba {
         this.listaAlbergues = new ArrayList<Albergue>();
         this.listaAlbergues.add(0,this.a0);
 		this.listaAlbergues.add(1,this.a1);    
+
+	}
+
+	public void crearReservasSueltas() {
+
+		// Crea tres reservas EN MEMORIA: r0, r1, r2
+		// Sin Albergue asignado (temporalmete), ni Peregrinos
+
+		this.r0 = new Reserva();
+		this.r0.setCodigo("R00001");
+		this.r0.setFechaEntrada(LocalDate.of(2022, 6, 1));
+		this.r0.setFechaSalida(LocalDate.of(2022, 6, 5));
+
+		this.r1 = new Reserva();
+		this.r1.setCodigo("R00002");
+		this.r1.setFechaEntrada(LocalDate.of(2022, 6, 1));
+		this.r1.setFechaSalida(LocalDate.of(2022, 6, 3));
+
+		this.r2 = new Reserva();
+		this.r2.setCodigo("R00003");
+		this.r2.setFechaEntrada(LocalDate.of(2022, 8, 8));
+		this.r2.setFechaSalida(LocalDate.of(2022, 8, 11));
+		
+        this.listaReservas = new ArrayList<Reserva>();
+        this.listaReservas.add(0,this.r0);
+		this.listaReservas.add(1,this.r1);    
+		this.listaReservas.add(2,this.r2); 
+
+	}
+
+	public void crearAlbergueconReservas() {
+
+		this.crearAlberguesSueltos();
+		this.crearReservasSueltas();
+		
+		this.a0.anadirReserva(this.r0);
+		this.a0.anadirReserva(this.r2);
+		this.a1.anadirReserva(this.r1);
 
 	}
 
@@ -177,6 +217,29 @@ public class ProductorDatosPrueba {
 					em.persist(itRes.next());
 				}
 				
+			}
+
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw (e);
+			}
+		}	
+	}
+
+	public void grabarReservas() {
+		EntityManager em=null;
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			Iterator<Reserva> itRes = this.listaReservas.iterator();
+			while (itRes.hasNext()) {
+				Reserva res = itRes.next();
+				em.persist(res);
 			}
 
 			em.getTransaction().commit();
