@@ -3,6 +3,8 @@ package gei.id.tutelado;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,6 +21,13 @@ public class ProductorDatosPrueba {
 
 	public Peregrino p0,p1;
 	public List<Peregrino> listaPeregrinos;
+
+	public Albergue a0, a1;
+	public List<Albergue> listaAlbergues;
+	public Set<String> listaServiciosa0, listaServiciosa1;
+
+	/*public Reserva r0, r1;
+	public List<Reserva> listaReservas;*/
 	
 	public void Setup (Configuracion config) {
 		this.emf=(EntityManagerFactory) config.get("EMF");
@@ -49,8 +58,8 @@ public class ProductorDatosPrueba {
 		this.e1.setPuesto("Ayudante de Cocina");
 
         this.listaEmpleados = new ArrayList<Empleado> ();
-        this.listaEmpleados.add(0,e0);
-        this.listaEmpleados.add(1,e1);        
+        this.listaEmpleados.add(0,this.e0);
+        this.listaEmpleados.add(1,this.e1);        
 
 	}
 
@@ -79,13 +88,50 @@ public class ProductorDatosPrueba {
 		this.p1.setLimitacionFisica(true);
 
         this.listaPeregrinos = new ArrayList<Peregrino> ();
-        this.listaPeregrinos.add(0,p0);
-        this.listaPeregrinos.add(1,p1);        
+        this.listaPeregrinos.add(0,this.p0);
+        this.listaPeregrinos.add(1,this.p1);        
 
 	}
 
-	
-	public void guardaPersonas() {
+	public void crearAlberguesSueltos() {
+
+		this.listaServiciosa0 = new TreeSet<String>();
+		this.listaServiciosa0.add("Maquinas expendedoras");
+		this.listaServiciosa0.add("Lavadora/Secadora");
+		this.listaServiciosa0.add("WiFi gratuita");
+
+		this.listaServiciosa1 = new TreeSet<String>();
+		this.listaServiciosa1.add("Lavadora/Secadora");
+		this.listaServiciosa1.add("WiFi gratuita");
+		this.listaServiciosa1.add("Cocina compartida");
+
+		// Crea dos albergues EN MEMORIA: a0,a1
+
+		this.a0 = new Albergue();
+		this.a0.setCru("12345678912345");
+		this.a0.setNombre("Albergue San Lorenzo de Bruma");
+		this.a0.setPoblacion("Bruma");
+		this.a0.setCamino("Camino Inglés");
+		this.a0.setEtapa("Etapa 4: Betanzos a Hospital de Bruma");
+		this.a0.setDisponible(true);
+		this.a0.setServicios(this.listaServiciosa0);
+
+		this.a1 = new Albergue();
+		this.a1.setCru("98745612378945");
+		this.a1.setNombre("Albergue Turístico Salceda");
+		this.a1.setPoblacion("Salceda");
+		this.a1.setCamino("Camino Francés");
+		this.a1.setEtapa("Etapa 30: Arzúa a Pedrouzo");
+		this.a1.setDisponible(true);
+		this.a1.setServicios(this.listaServiciosa1);
+		
+        this.listaAlbergues = new ArrayList<Albergue>();
+        this.listaAlbergues.add(0,this.a0);
+		this.listaAlbergues.add(1,this.a1);    
+
+	}
+
+	public void grabarPersonas() {
 		EntityManager em=null;
 		try {
 			em = emf.createEntityManager();
@@ -113,6 +159,36 @@ public class ProductorDatosPrueba {
 			}
 		}	
 	}
+
+	public void grabarAlbergues() {
+		EntityManager em=null;
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			Iterator<Albergue> itAlb = this.listaAlbergues.iterator();
+			while (itAlb.hasNext()) {
+				Albergue alb = itAlb.next();
+				em.persist(alb);
+
+				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
+				Iterator<Reserva> itRes = alb.getReservas().iterator();
+				while (itRes.hasNext()) {
+					em.persist(itRes.next());
+				}
+				
+			}
+
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw (e);
+			}
+		}	
+	}
 	
 	public void limpiarBD () {
 		EntityManager em=null;
@@ -121,9 +197,15 @@ public class ProductorDatosPrueba {
 			em.getTransaction().begin();
 			
 			Iterator <Persona> itP = em.createNamedQuery("Persona.recuperaTodos", Persona.class).getResultList().iterator();
-			while (itP.hasNext()) em.remove(itP.next());	
-			
+			while (itP.hasNext()) em.remove(itP.next());
+			Iterator<Albergue> itA = em.createNamedQuery("Albergue.recuperaTodos", Albergue.class).getResultList().iterator();
+			while (itA.hasNext()) em.remove(itA.next());
+			Iterator<Reserva> itR = em.createNamedQuery("Reserva.recuperaTodos", Reserva.class).getResultList().iterator();
+			while (itR.hasNext()) em.remove(itR.next());
+
 			em.createNativeQuery("UPDATE tabla_ids SET ultimo_valor_id=0 WHERE nombre_id='idPersona'" ).executeUpdate();
+			em.createNativeQuery("UPDATE tabla_ids SET ultimo_valor_id=0 WHERE nombre_id='idAlbergue'" ).executeUpdate();
+			em.createNativeQuery("UPDATE tabla_ids SET ultimo_valor_id=0 WHERE nombre_id='idReserva'" ).executeUpdate();
 
 			em.getTransaction().commit();
 			em.close();
