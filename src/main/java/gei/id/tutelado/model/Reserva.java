@@ -19,11 +19,11 @@ initialValue=0, allocationSize=1)
 })
 
 @Entity
-public class Reserva {
+public class Reserva implements Comparable<Reserva>{
+
     @Id
     @GeneratedValue (generator="generadorIdsReservas")
     private Long id;
-
     
     @Column(nullable = false, unique = true)
     private String codigo;
@@ -41,7 +41,7 @@ public class Reserva {
         Lado PROPIETARIO de la asociación bidireccional
         - Incluye la clave foranea que apunta a Albergue
     */
-    @ManyToOne (fetch=FetchType.EAGER, cascade={CascadeType.PERSIST})
+    @ManyToOne (fetch=FetchType.EAGER, cascade={})
     @JoinColumn (name= "fk_Albergue_Reserva", nullable=false, unique=false)
     private Albergue albergue;
 
@@ -94,6 +94,14 @@ public class Reserva {
         this.albergue = albergue;
     }
 
+    public Set<Peregrino> getPeregrinos() {
+        return peregrinos;
+    }
+
+    public void setPeregrinos(Set<Peregrino> peregrinos) {
+        this.peregrinos = peregrinos;
+    }
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -126,5 +134,9 @@ public class Reserva {
             ", albergue=" + albergue + ", peregrinos=" + peregrinos + "]";
     }
 
+    @Override
+	public int compareTo(Reserva other) {
+		return (this.fechaEntrada.isBefore(other.getFechaEntrada())? -1:1);
+	}
 
 }
