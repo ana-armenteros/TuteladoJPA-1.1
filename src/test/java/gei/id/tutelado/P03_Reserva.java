@@ -24,6 +24,7 @@ import java.time.LocalDate;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.LazyInitializationException;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -202,6 +203,39 @@ public class P03_Reserva{
 		Assert.assertEquals(nuevaFechaSalida, r1prueba.getFechaSalida());
 
     } 	
+
+	@Test 
+    public void test07_EAGER_Albergue() {
+    	
+    	Reserva r1prueba;
+    	Boolean excepcion;
+    	
+    	log.info("");	
+		log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+		productorDatos.crearAlbergueconReservas();
+		productorDatos.grabarAlbergues();
+
+		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+    	log.info("Obxectivo: Proba da recuperación de propiedades EAGER\n");   
+
+    	// Situación de partida: a1, r1 desligados
+    	
+		log.info("Probando (que no hay excepcion LAZY) tras acceso inicial a la propiedad EAGER fuera de sesion ----------------------------------------");
+    	
+    	r1prueba = reservaDao.recuperaPorCodigo(productorDatos.r1.getCodigo());  
+		log.info("Acceso a Albergue con una Reserva");
+    	try	{
+			//Albergue a1, es igual al Albergue asociado que tiene la Reserva r1
+        	Assert.assertEquals(productorDatos.a1, r1prueba.getAlbergue());
+        	excepcion=false;
+    	} catch (LazyInitializationException ex) {
+    		excepcion=true;
+    		log.info(ex.getClass().getName());
+    	};    	
+    	Assert.assertFalse(excepcion);    
+    }
+
     /* 
     @Test
     public void test09_Excepcions() {
