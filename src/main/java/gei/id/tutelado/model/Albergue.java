@@ -1,5 +1,6 @@
 package gei.id.tutelado.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,7 +48,7 @@ public class Albergue {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable (name="t_albergue_servicios", joinColumns = @JoinColumn(name = "albergue_id"))
     @Column (name = "servicio") 
-    private Set<String> servicios = new TreeSet<String>();
+    private Set<String> servicios = new HashSet<String>();
 
     /*	Propagación automática de REMOVE:
 		- Una reserva no puede existir sin que exista un albergue al que estar asociada.

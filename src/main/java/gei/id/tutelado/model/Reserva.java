@@ -1,8 +1,8 @@
 package gei.id.tutelado.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.*;
 
@@ -34,10 +34,7 @@ public class Reserva implements Comparable<Reserva>{
     @Column(nullable = false, unique = false)
     private LocalDate fechaSalida;
 
-    /*	Propagación automática de PERSIST:
-		- Una reserva no puede existir sin que exista un albergue al que estar asociada.
-		- Si se persiste una reserva, el albergue al que se asocia debe persistirse también.
-    
+    /*
         Lado PROPIETARIO de la asociación bidireccional
         - Incluye la clave foranea que apunta a Albergue
     */
@@ -45,14 +42,15 @@ public class Reserva implements Comparable<Reserva>{
     @JoinColumn (name= "fk_Albergue_Reserva", nullable=false, unique=false)
     private Albergue albergue;
 
-    /*	Propagación automática de PERSIST:
+    /*	
+        Propagación automática de PERSIST:
 		- Una reserva no puede existir sin que exista el/los peregrinos a los que estar asociada.
 		- Si se persiste una reserva, el/los peregrinos a los que se asocia deben persistirse también.
     */
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST}) 
     @JoinTable (name = "t_reservas_peregrinos",
             joinColumns = @JoinColumn(name = "reserva_id"))
-    private Set<Peregrino> peregrinos = new TreeSet<Peregrino>();
+    private Set<Peregrino> peregrinos = new HashSet<Peregrino>();
 
     public Long getId() {
         return this.id;
