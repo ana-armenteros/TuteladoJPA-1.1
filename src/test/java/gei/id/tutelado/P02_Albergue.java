@@ -7,6 +7,7 @@ import gei.id.tutelado.dao.AlbergueDaoJPA;
 import gei.id.tutelado.dao.ReservaDao;
 import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Albergue;
+import gei.id.tutelado.model.Reserva;
 
 //import org.apache.log4j.Logger;
 import org.junit.After;
@@ -24,6 +25,7 @@ import org.junit.runner.Description;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.LazyInitializationException;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -112,7 +114,12 @@ public class P02_Albergue {
     	Assert.assertEquals(productorDatos.a0.getCamino(), a0prueba.getCamino());
     	Assert.assertEquals(productorDatos.a0.getEtapa(), a0prueba.getEtapa());
     	Assert.assertEquals(productorDatos.a0.getDisponible(), a0prueba.getDisponible());
-    	//Assert.assertEquals(productorDatos.a0.getServicios(), a0prueba.getServicios());
+    	/*
+		 * Como la coleccion de servicios, tiene la asociacion definiada con estrategia tipo LAZY
+		 * no podemos recuperar los objetos como tal, por lo que al intenta recuperarlo saltaria 
+		 * una excepcion tipo LazyInitializationException
+		 */
+		//Assert.assertEquals(productorDatos.a0.getServicios(), a0prueba.getServicios());
 
     	log.info("");	
 		log.info("Probando recuperacion por CRU INEXISTENTE de Albergue -----------------------------------------------");
@@ -219,7 +226,65 @@ public class P02_Albergue {
 		Assert.assertNull(reservaDao.recuperaPorCodigo(productorDatos.r0.getCodigo()));
 		Assert.assertNull(reservaDao.recuperaPorCodigo(productorDatos.r2.getCodigo()));
 		
-    } 	
+    } 
+	
+	@Test 
+    public void test08_LAZY_Reservas() {
+    	
+		Albergue a0prueba;
+    	Reserva r0prueba;
+    	Boolean excepcion;
+    	
+    	log.info("");	
+		log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+		productorDatos.crearAlbergueconReservas();
+		productorDatos.grabarAlbergues();
+
+		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+    	log.info("Obxectivo: Prueba de la recuperación de propiedades LAZY\n" 
+		+ "\t\t\t\t Casos contemplados:\n"
+		+ "\t\t\t\t a) Recuperación de Albergue con colección (LAZY) de Reservas \n"
+		+ "\t\t\t\t b) Carga forzada de colección LAZY da dicha coleccion\n"     	
+		+ "\t\t\t\t c) Recuperacion de una Reserva suelta con referencia (EAGER) a Albergue\n");     	
+
+    	// Situación de partida: a0, r0, r2 desligados
+    	
+		log.info("a) Probando (excepcion LAZY) tras acceso inicial a la propiedad LAZY  ----------------------------------------");
+    	
+    	a0prueba = albergueDao.recuperaPorCru(productorDatos.a0.getCru());  
+		log.info("Acceso a las Reservas de un Albergue");
+    	try	{
+			//Comprobar Albergue a0 esta asociado a dos Reservas (r0, r2)
+			Assert.assertEquals(2, a0prueba.getReservas().size());
+        	Assert.assertEquals(productorDatos.r0, a0prueba.getReservas().first());
+        	Assert.assertEquals(productorDatos.r2, a0prueba.getReservas().last());
+        	excepcion=false;
+    	} catch (LazyInitializationException ex ) {
+    		excepcion=true;
+    		log.info(ex.getClass().getName());
+    	};    	
+    	Assert.assertTrue(excepcion);    
+
+    	log.info("");
+    	log.info("b) Probando carga forzada de coleccion LAZY ------------------------------------------------------------------------");
+    	
+		//Albergue con el proxy sin inicializar
+		a0prueba = albergueDao.recuperaPorCru(productorDatos.a0.getCru());
+		//Albergue con el proxy ya inicializado (forzado)
+		a0prueba = albergueDao.restauraReservas(a0prueba);
+
+		Assert.assertEquals(2, a0prueba.getReservas().size());
+		Assert.assertEquals(productorDatos.r0, a0prueba.getReservas().first());
+		Assert.assertEquals(productorDatos.r2, a0prueba.getReservas().last());
+    	
+		log.info("");
+    	log.info("c) Probando acceso a la referencia EAGER ------------------------------------------------------------------------------");
+		
+		r0prueba = reservaDao.recuperaPorCodigo(productorDatos.r0.getCodigo());
+		Assert.assertEquals(productorDatos.a0, r0prueba.getAlbergue());
+
+    }
 
     @Test
     public void test09_Excepcions() {
