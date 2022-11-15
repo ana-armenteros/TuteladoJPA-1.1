@@ -2,6 +2,8 @@ package gei.id.tutelado;
 
 import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.configuracion.Configuracion;
+import gei.id.tutelado.dao.AlbergueDao;
+import gei.id.tutelado.dao.AlbergueDaoJPA;
 import gei.id.tutelado.dao.ReservaDao;
 import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Reserva;
@@ -24,7 +26,6 @@ import java.time.LocalDate;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.LazyInitializationException;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -36,6 +37,7 @@ public class P03_Reserva{
     
     private static Configuracion cfg;
     private static ReservaDao reservaDao;
+	private static AlbergueDao albergueDao;
     
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -60,6 +62,9 @@ public class P03_Reserva{
 
     	reservaDao = new ReservaDaoJPA();
     	reservaDao.setup(cfg);
+
+		albergueDao = new AlbergueDaoJPA();
+		albergueDao.setup(cfg);
     	
     	productorDatos = new ProductorDatosPrueba();
     	productorDatos.Setup(cfg);
@@ -205,36 +210,39 @@ public class P03_Reserva{
     } 	
 
 	@Test 
-    public void test07_EAGER_Albergue() {
-    	
-    	Reserva r1prueba;
-    	Boolean excepcion;
+    public void test05_Propagacion_PERSIST() {
     	
     	log.info("");	
 		log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
-
+		
 		productorDatos.crearAlbergueconReservas();
-		productorDatos.grabarAlbergues();
+		productorDatos.crearPeregrinosSueltos();
+		productorDatos.r0.setPeregrinos(productorDatos.listaPeregrinos);
 
+    	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-    	log.info("Obxectivo: Proba da recuperación de propiedades EAGER\n");   
+    	log.info("Obxectivo: Prueba de grabacion de una nueva Reserva con Peregrinos (nuevos) asociados\n");
 
-    	// Situación de partida: a1, r1 desligados
-    	
-		log.info("Probando (que no hay excepcion LAZY) tras acceso inicial a la propiedad EAGER fuera de sesion ----------------------------------------");
-    	
-    	r1prueba = reservaDao.recuperaPorCodigo(productorDatos.r1.getCodigo());  
-		log.info("Acceso a Albergue con una Reserva");
-    	try	{
-			//Albergue a1, es igual al Albergue asociado que tiene la Reserva r1
-        	Assert.assertEquals(productorDatos.a1, r1prueba.getAlbergue());
-        	excepcion=false;
-    	} catch (LazyInitializationException ex) {
-    		excepcion=true;
-    		log.info(ex.getClass().getName());
-    	};    	
-    	Assert.assertFalse(excepcion);    
-    }
+    	// Situación de partida: r0, p0, p1 transitorios
+
+    	Assert.assertNull(productorDatos.r0.getId());
+		Assert.assertNull(productorDatos.p0.getId());
+		Assert.assertNull(productorDatos.p1.getId());
+		
+		log.info("Grabando en BD Reserva con Peregrinos ----------------------------------------------------------------------");
+
+		/* Aqui el persist sobre r0 debe propagarse a p0 y p1 
+		 * NOTA: Recordar quee hay que hacer persistente de forma manual tambien el Albergue al que 
+		 * esta asociado la reserva, ya que la referencia no puede ser NULL
+		*/
+		albergueDao.almacena(productorDatos.r0.getAlbergue());
+		reservaDao.almacena(productorDatos.r0);
+
+    	Assert.assertNotNull(productorDatos.r0.getId());
+		Assert.assertNotNull(productorDatos.p0.getId());
+		Assert.assertNotNull(productorDatos.p1.getId());
+
+    } 
 
     /* 
     @Test
