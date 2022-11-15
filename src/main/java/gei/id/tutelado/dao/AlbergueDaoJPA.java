@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.LazyInitializationException;
+
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Albergue;
 
@@ -110,6 +112,41 @@ public class AlbergueDaoJPA implements AlbergueDao {
 		return (albergues.size()!=0?albergues.get(0):null);
 	}
 
+	@Override
+	public Albergue restauraReservas(Albergue albergue) {
+		
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			try {
+				albergue.getReservas().size();
+			} catch (Exception ex1) {
+				if (ex1 instanceof LazyInitializationException) {
+
+					/* Vuelve a ligar el objeto Albergue a un nuevo Contexto de Persistencia
+					 * y accede a la propiedad en ese momento para cargarla
+					*/
+					albergue = em.merge(albergue);
+					albergue.getReservas().size();
+				} else {
+					throw ex1;
+				}
+			}
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception ex) {
+			if (em != null && em.isOpen()) {
+				if (em.getTransaction().isActive())
+					em.getTransaction().rollback();
+				em.close();
+				throw ex;
+			}
+		}
+
+		return albergue;
+
+	}
 
 }
 

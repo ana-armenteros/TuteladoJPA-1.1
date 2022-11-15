@@ -13,4 +13,11 @@ public interface AlbergueDao {
 	void elimina (Albergue albergue);
 	Albergue recuperaPorCru (String cru);
 
+	/* 
+		Operaciones por atributos LAZY
+		- Recibe un Albergue con la coleccion de Reservas como proxy SIN INICIALIZAR
+		- Devuelve una copia del Albergergue con la coleccion de Reservas INICIALIZADA
+	*/
+	Albergue restauraReservas (Albergue albergue);
+
 }
