@@ -4,6 +4,8 @@ import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.dao.AlbergueDao;
 import gei.id.tutelado.dao.AlbergueDaoJPA;
+import gei.id.tutelado.dao.ReservaDao;
+import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Albergue;
 
 //import org.apache.log4j.Logger;
@@ -33,6 +35,7 @@ public class P02_Albergue {
     
     private static Configuracion cfg;
     private static AlbergueDao albergueDao;
+	private static ReservaDao reservaDao;
     
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -57,6 +60,9 @@ public class P02_Albergue {
 
     	albergueDao = new AlbergueDaoJPA();
     	albergueDao.setup(cfg);
+
+		reservaDao = new ReservaDaoJPA();
+		reservaDao.setup(cfg);
     	
     	productorDatos = new ProductorDatosPrueba();
     	productorDatos.Setup(cfg);
@@ -156,11 +162,6 @@ public class P02_Albergue {
     	albergueDao.elimina(productorDatos.a0);    	
     	Assert.assertNull(albergueDao.recuperaPorCru(productorDatos.a0.getCru()));
 
-		Assert.assertNotNull(albergueDao.recuperaPorCru(productorDatos.a1.getCru()));
-    	albergueDao.elimina(productorDatos.a1);    	
-    	Assert.assertNull(albergueDao.recuperaPorCru(productorDatos.a1.getCru()));
-
-
     } 	
 
     @Test 
@@ -192,6 +193,34 @@ public class P02_Albergue {
 
     } 	
     
+	@Test 
+    public void test05_Propagacion_REMOVE() {
+    	
+    	log.info("");	
+		log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+   	
+		productorDatos.crearAlbergueconReservas();
+		productorDatos.grabarAlbergues();
+
+    	log.info("");	
+		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+    	log.info("Obxectivo: Prueba de eliminación de un Albergue con Reservas asociadas\n");
+
+    	// Situación de partida: a0, r0, r2 desligados
+
+    	Assert.assertNotNull(albergueDao.recuperaPorCru(productorDatos.a0.getCru()));
+		Assert.assertNotNull(reservaDao.recuperaPorCodigo(productorDatos.r2.getCodigo()));
+		Assert.assertNotNull(reservaDao.recuperaPorCodigo(productorDatos.r2.getCodigo()));
+		
+		// Aqui o remove sobre a0 debe propagarse a las reservas r0 y r2 
+		albergueDao.elimina(productorDatos.a0); 
+
+		Assert.assertNull(albergueDao.recuperaPorCru(productorDatos.a0.getCru()));
+		Assert.assertNull(reservaDao.recuperaPorCodigo(productorDatos.r0.getCodigo()));
+		Assert.assertNull(reservaDao.recuperaPorCodigo(productorDatos.r2.getCodigo()));
+		
+    } 	
+
     @Test
     public void test09_Excepcions() {
     	
