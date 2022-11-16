@@ -2,10 +2,10 @@ package gei.id.tutelado;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,7 +21,7 @@ public class ProductorDatosPrueba {
 	public List<Empleado> listaEmpleados;
 
 	public Peregrino p0,p1;
-	public List<Peregrino> listaPeregrinos;
+	public Set<Peregrino> listaPeregrinos;
 
 	public Albergue a0, a1;
 	public List<Albergue> listaAlbergues;
@@ -88,20 +88,20 @@ public class ProductorDatosPrueba {
 		this.p1.setMedio("A caballo");
 		this.p1.setLimitacionFisica(true);
 
-        this.listaPeregrinos = new ArrayList<Peregrino> ();
-        this.listaPeregrinos.add(0,this.p0);
-        this.listaPeregrinos.add(1,this.p1);        
+        this.listaPeregrinos = new HashSet<Peregrino> ();
+        this.listaPeregrinos.add(this.p0);
+        this.listaPeregrinos.add(this.p1);        
 
 	}
 
 	public void crearAlberguesSueltos() {
 
-		this.listaServiciosa0 = new TreeSet<String>();
+		this.listaServiciosa0 = new HashSet<String>();
 		this.listaServiciosa0.add("Maquinas expendedoras");
 		this.listaServiciosa0.add("Lavadora/Secadora");
 		this.listaServiciosa0.add("WiFi gratuita");
 
-		this.listaServiciosa1 = new TreeSet<String>();
+		this.listaServiciosa1 = new HashSet<String>();
 		this.listaServiciosa1.add("Lavadora/Secadora");
 		this.listaServiciosa1.add("WiFi gratuita");
 		this.listaServiciosa1.add("Cocina compartida");
@@ -147,6 +147,7 @@ public class ProductorDatosPrueba {
 		this.r1.setCodigo("R00002");
 		this.r1.setFechaEntrada(LocalDate.of(2022, 6, 1));
 		this.r1.setFechaSalida(LocalDate.of(2022, 6, 3));
+		this.r1.setPeregrinos(this.listaPeregrinos);
 
 		this.r2 = new Reserva();
 		this.r2.setCodigo("R00003");
@@ -230,29 +231,6 @@ public class ProductorDatosPrueba {
 		}	
 	}
 
-	public void grabarReservas() {
-		EntityManager em=null;
-		try {
-			em = emf.createEntityManager();
-			em.getTransaction().begin();
-
-			Iterator<Reserva> itRes = this.listaReservas.iterator();
-			while (itRes.hasNext()) {
-				Reserva res = itRes.next();
-				em.persist(res);
-			}
-
-			em.getTransaction().commit();
-			em.close();
-		} catch (Exception e) {
-			if (em!=null && em.isOpen()) {
-				if (em.getTransaction().isActive()) em.getTransaction().rollback();
-				em.close();
-				throw (e);
-			}
-		}	
-	}
-	
 	public void limpiarBD () {
 		EntityManager em=null;
 		try {

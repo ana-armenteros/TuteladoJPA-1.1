@@ -90,7 +90,7 @@ public class P01_Personas {
 
 		productorDatos.crearEmpleadosSueltos();
 		productorDatos.crearPeregrinosSueltos();
-    	productorDatos.guardaPersonas();
+    	productorDatos.grabarPersonas();
     	
     	log.info("");	
 		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
@@ -169,7 +169,7 @@ public class P01_Personas {
 
 		productorDatos.crearEmpleadosSueltos();
 		productorDatos.crearPeregrinosSueltos();
-    	productorDatos.guardaPersonas();
+    	productorDatos.grabarPersonas();
  	
     	log.info("");	
 		log.info("Inicio de la 1ª parte del test --------------------------------------------------------------------------------------------------");
@@ -200,7 +200,7 @@ public class P01_Personas {
 
 		productorDatos.crearEmpleadosSueltos();
 		productorDatos.crearPeregrinosSueltos();
-    	productorDatos.guardaPersonas();
+    	productorDatos.grabarPersonas();
 
     	log.info("");	
 		log.info("Inicio la 1ª parte del test --------------------------------------------------------------------------------------------------");
