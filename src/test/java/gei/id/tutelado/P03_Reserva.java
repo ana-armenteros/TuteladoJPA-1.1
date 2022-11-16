@@ -215,9 +215,16 @@ public class P03_Reserva{
     	log.info("");	
 		log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
 		
-		productorDatos.crearAlbergueconReservas();
+		productorDatos.crearAlberguesSueltos();
+		productorDatos.grabarAlbergues();
+		productorDatos.crearReservasSueltas();
 		productorDatos.crearPeregrinosSueltos();
-		productorDatos.r0.setPeregrinos(productorDatos.listaPeregrinos);
+		
+		/* NOTA: Recordar quee hay que hacer persistente de forma manual tambien el Albergue al que 
+		* esta asociado la reserva, ya que la referencia no puede ser NULL ambos lados deben estar actualizados
+	   	*/
+	   productorDatos.a0.anadirReserva(productorDatos.r0);
+	   productorDatos.r0.setPeregrinos(productorDatos.listaPeregrinos);
 
     	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
@@ -231,11 +238,7 @@ public class P03_Reserva{
 		
 		log.info("Grabando en BD Reserva con Peregrinos ----------------------------------------------------------------------");
 
-		/* Aqui el persist sobre r0 debe propagarse a p0 y p1 
-		 * NOTA: Recordar quee hay que hacer persistente de forma manual tambien el Albergue al que 
-		 * esta asociado la reserva, ya que la referencia no puede ser NULL
-		*/
-		albergueDao.almacena(productorDatos.r0.getAlbergue());
+		// Aqui el persist sobre r0 debe propagarse a p0 y p1 
 		reservaDao.almacena(productorDatos.r0);
 
     	Assert.assertNotNull(productorDatos.r0.getId());
