@@ -16,7 +16,11 @@ initialValue=0, allocationSize=1)
 	@NamedQuery (name="Albergue.recuperaPorCru",
 				 query="SELECT a FROM Albergue a where a.cru=:cru"),
 	@NamedQuery (name="Albergue.recuperaTodos",
-				 query="SELECT a FROM Albergue a ORDER BY a.cru")
+				 query="SELECT a FROM Albergue a ORDER BY a.cru"),
+	@NamedQuery (name="Albergue.obtenerAlbergueDisponiblePorCamino",
+				 query="SELECT COUNT(id) FROM Albergue a WHERE a.camino=:camino AND a.disponible=:true"),
+	@NamedQuery (name="Albergue.obtenerAlberguesSinReservas",
+				 query="SELECT a FROM Reserva r RIGHT JOIN Albergue a ON r.fk_albergue_reserva=:a.id WHERE r.id IS NULL")
 })
 
 @Entity

@@ -13,9 +13,11 @@ initialValue=0, allocationSize=1)
 
 @NamedQueries ({
 	@NamedQuery (name="Reserva.recuperaPorCodigo",
-				 query="SELECT r FROM Reserva r where r.codigo=:codigo"),
+				 query="SELECT r FROM Reserva r WHERE r.codigo=:codigo"),
 	@NamedQuery (name="Reserva.recuperaTodos",
-				 query="SELECT r FROM Reserva r ORDER BY r.codigo")
+				 query="SELECT r FROM Reserva r ORDER BY r.codigo"),
+	@NamedQuery (name="Reserva.obtenerReservasGrupales",
+				 query="SELECT r FROM Reserva r WHERE (SELECT count(p) FROM Peregrino) > 1")
 })
 
 @Entity
