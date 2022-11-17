@@ -113,6 +113,59 @@ public class AlbergueDaoJPA implements AlbergueDao {
 	}
 
 	@Override
+	public Albergue obtenerAlbergueDisponiblePorCamino(String camino, Boolean disponible) {
+		List <Albergue> albergues=null;
+
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			albergues = em.createNamedQuery("Albergue.obtenerAlbergueDisponiblePorCamino", Albergue.class)
+						.setParameter("camino", camino)
+						.setParameter("disponible", disponible)
+						.getResultList(); 
+
+			em.getTransaction().commit();
+			em.close();	
+
+		}
+		catch (Exception ex ) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw(ex);
+			}
+		}
+
+		return (albergues.size()!=0?albergues.get(0):null);
+	}
+
+	@Override
+	public Albergue obtenerAlberguesSinReservas() {
+		List <Albergue> albergues=null;
+
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			albergues = em.createNamedQuery("Albergue.obtenerAlberguesSinReservas", Albergue.class).getResultList(); 
+
+			em.getTransaction().commit();
+			em.close();	
+
+		}
+		catch (Exception ex ) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw(ex);
+			}
+		}
+
+		return (albergues.size()!=0?albergues.get(0):null);
+	}
+
+	@Override
 	public Albergue restauraReservas(Albergue albergue) {
 		
 		try {

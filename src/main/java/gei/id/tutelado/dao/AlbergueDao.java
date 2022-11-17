@@ -12,6 +12,8 @@ public interface AlbergueDao {
 	Albergue modifica (Albergue albergue);
 	void elimina (Albergue albergue);
 	Albergue recuperaPorCru (String cru);
+	Albergue obtenerAlbergueDisponiblePorCamino (String camino, Boolean disponible);
+	Albergue obtenerAlberguesSinReservas ();
 
 	/* 
 		Operaciones por atributos LAZY
