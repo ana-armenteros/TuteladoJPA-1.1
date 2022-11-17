@@ -9,9 +9,7 @@ initialValue=0, allocationSize=1)
 
 @NamedQueries ({
 	@NamedQuery (name="Persona.recuperaPorNif",
-				 query="SELECT p FROM Persona p where p.nif=:nif"),
-	@NamedQuery (name="Persona.recuperaTodos",
-				 query="SELECT p FROM Persona p ORDER BY p.nif")
+				 query="SELECT p FROM Persona p where p.nif=:nif")
 })
 
 @Entity
