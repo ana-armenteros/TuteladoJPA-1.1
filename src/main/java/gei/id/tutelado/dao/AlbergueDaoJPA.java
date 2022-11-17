@@ -113,17 +113,17 @@ public class AlbergueDaoJPA implements AlbergueDao {
 	}
 
 	@Override
-	public Albergue obtenerAlbergueDisponiblePorCamino(String camino, Boolean disponible) {
-		List <Albergue> albergues=null;
+	public Long obtenerAlbergueDisponiblePorCamino(String camino) {
+
+		Long albergues= new Long(0);
 
 		try {
 			em = emf.createEntityManager();
 			em.getTransaction().begin();
 
-			albergues = em.createNamedQuery("Albergue.obtenerAlbergueDisponiblePorCamino", Albergue.class)
+			albergues = em.createNamedQuery("Albergue.obtenerAlbergueDisponiblePorCamino", Long.class)
 						.setParameter("camino", camino)
-						.setParameter("disponible", disponible)
-						.getResultList(); 
+						.getSingleResult().longValue(); 
 
 			em.getTransaction().commit();
 			em.close();	
@@ -137,11 +137,12 @@ public class AlbergueDaoJPA implements AlbergueDao {
 			}
 		}
 
-		return (albergues.size()!=0?albergues.get(0):null);
+		return albergues;
 	}
 
+	/* 
 	@Override
-	public Albergue obtenerAlberguesSinReservas() {
+	public List<Albergue> obtenerAlberguesSinReservas() {
 		List <Albergue> albergues=null;
 
 		try {
@@ -162,8 +163,9 @@ public class AlbergueDaoJPA implements AlbergueDao {
 			}
 		}
 
-		return (albergues.size()!=0?albergues.get(0):null);
+		return albergues;
 	}
+	*/
 
 	@Override
 	public Albergue restauraReservas(Albergue albergue) {

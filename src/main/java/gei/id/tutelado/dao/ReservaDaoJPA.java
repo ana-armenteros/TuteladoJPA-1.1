@@ -111,7 +111,7 @@ public class ReservaDaoJPA implements ReservaDao {
 	}
 
 	@Override
-	public Reserva obtenerReservasGrupales() {
+	public List<Reserva> obtenerReservasGrupales() {
 		List <Reserva> reservas=null;
 
 		try {
@@ -132,7 +132,7 @@ public class ReservaDaoJPA implements ReservaDao {
 			}
 		}
 
-		return (reservas.size()!=0?reservas.get(0):null);
+		return reservas;
 	}
 
 

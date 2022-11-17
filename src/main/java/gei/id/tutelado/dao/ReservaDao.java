@@ -1,6 +1,8 @@
 package gei.id.tutelado.dao;
 
 
+import java.util.List;
+
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Reserva;
 
@@ -12,5 +14,7 @@ public interface ReservaDao {
 	Reserva modifica (Reserva reserva);
 	void elimina (Reserva reserva);
 	Reserva recuperaPorCodigo (String codigo);
-	Reserva obtenerReservasGrupales ();
+
+	//Queries para la consulta (3.Subconsulta) que no es subconsulta
+	List<Reserva> obtenerReservasGrupales ();
 }

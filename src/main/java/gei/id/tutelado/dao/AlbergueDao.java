@@ -1,6 +1,8 @@
 package gei.id.tutelado.dao;
 
 
+import java.util.List;
+
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Albergue;
 
@@ -12,8 +14,10 @@ public interface AlbergueDao {
 	Albergue modifica (Albergue albergue);
 	void elimina (Albergue albergue);
 	Albergue recuperaPorCru (String cru);
-	Albergue obtenerAlbergueDisponiblePorCamino (String camino, Boolean disponible);
-	Albergue obtenerAlberguesSinReservas ();
+
+	//Queries para las consultas (2.OuterJoin y 4.Funcion Agrupacion)
+	Long obtenerAlbergueDisponiblePorCamino (String camino);
+	//List<Albergue> obtenerAlberguesSinReservas ();
 
 	/* 
 		Operaciones por atributos LAZY

@@ -112,7 +112,7 @@ public class PersonaDaoJPA implements PersonaDao {
 		return (personas.size()!=0?personas.get(0):null);
 	}
 
-	@Override
+	/*@Override
 	public Peregrino obtenerPeregrinosReservaEnFechaAlbergue(LocalDate dia, String nombre) {
 		List <Peregrino> peregrinos=null;
 
@@ -139,6 +139,6 @@ public class PersonaDaoJPA implements PersonaDao {
 
 		return (peregrinos.size()!=0?peregrinos.get(0):null);
 	}
-
+*/
 
 }

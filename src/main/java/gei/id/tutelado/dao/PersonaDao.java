@@ -15,5 +15,7 @@ public interface PersonaDao {
 	Persona modifica (Persona persona);
 	void elimina (Persona persona);
 	Persona recuperaPorNif (String nif);
-	Peregrino obtenerPeregrinosReservaEnFechaAlbergue(LocalDate dia, String nombre);
+
+	//Queries para las consultas (1. INNNER Join)
+	//Peregrino obtenerPeregrinosReservaEnFechaAlbergue(LocalDate dia, String nombre);
 }
