@@ -12,4 +12,5 @@ public interface ReservaDao {
 	Reserva modifica (Reserva reserva);
 	void elimina (Reserva reserva);
 	Reserva recuperaPorCodigo (String codigo);
+	Reserva obtenerReservasGrupales ();
 }

@@ -110,6 +110,31 @@ public class ReservaDaoJPA implements ReservaDao {
 		return (reservas.size()!=0?reservas.get(0):null);
 	}
 
+	@Override
+	public Reserva obtenerReservasGrupales() {
+		List <Reserva> reservas=null;
+
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			reservas = em.createNamedQuery("Reserva.obtenerReservasGrupales", Reserva.class).getResultList(); 
+
+			em.getTransaction().commit();
+			em.close();	
+
+		}
+		catch (Exception ex ) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw(ex);
+			}
+		}
+
+		return (reservas.size()!=0?reservas.get(0):null);
+	}
+
 
 }
 
