@@ -21,9 +21,9 @@ public class ProductorDatosPrueba {
 	public List<Empleado> listaEmpleados;
 
 	public Peregrino p0,p1;
-	public Set<Peregrino> listaPeregrinos;
+	public Set<Peregrino> listaPeregrinos, listaPeregrinos1;
 
-	public Albergue a0, a1;
+	public Albergue a0, a1, a2, a3;
 	public List<Albergue> listaAlbergues;
 	public Set<String> listaServiciosa0, listaServiciosa1;
 
@@ -90,7 +90,10 @@ public class ProductorDatosPrueba {
 
         this.listaPeregrinos = new HashSet<Peregrino> ();
         this.listaPeregrinos.add(this.p0);
-        this.listaPeregrinos.add(this.p1);        
+        this.listaPeregrinos.add(this.p1);       
+		
+		this.listaPeregrinos1 = new HashSet<Peregrino> ();
+        this.listaPeregrinos1.add(this.p0);
 
 	}
 
@@ -106,7 +109,7 @@ public class ProductorDatosPrueba {
 		this.listaServiciosa1.add("WiFi gratuita");
 		this.listaServiciosa1.add("Cocina compartida");
 
-		// Crea dos albergues EN MEMORIA: a0,a1
+		// Crea dos albergues EN MEMORIA: a0,a1,a2,a3
 		// Sin reservas asignadas
 
 		this.a0 = new Albergue();
@@ -126,10 +129,30 @@ public class ProductorDatosPrueba {
 		this.a1.setEtapa("Etapa 30: Arzúa a Pedrouzo");
 		this.a1.setDisponible(true);
 		this.a1.setServicios(this.listaServiciosa1);
+
+		this.a2 = new Albergue();
+		this.a2.setCru("22334455667788");
+		this.a2.setNombre("Albergue Casa Campelo");
+		this.a2.setPoblacion("Piedracita de Cebreiro");
+		this.a2.setCamino("Camino Francés");
+		this.a2.setEtapa("Etapa 27: O Cebreiro a Samos");
+		this.a2.setDisponible(false);
+		this.a2.setServicios(this.listaServiciosa0);
+
+		this.a3 = new Albergue();
+		this.a3.setCru("32165498745612");
+		this.a3.setNombre("Albergue El Pajar de Algés");
+		this.a3.setPoblacion("Agés");
+		this.a3.setCamino("Camino Francés");
+		this.a3.setEtapa("Etapa 11: San Juan de Ortega a Burgos");
+		this.a3.setDisponible(true);
+		this.a3.setServicios(this.listaServiciosa1);
 		
         this.listaAlbergues = new ArrayList<Albergue>();
         this.listaAlbergues.add(0,this.a0);
 		this.listaAlbergues.add(1,this.a1);    
+		this.listaAlbergues.add(2,this.a2);
+		this.listaAlbergues.add(3,this.a3);   
 
 	}
 
@@ -142,12 +165,13 @@ public class ProductorDatosPrueba {
 		this.r0.setCodigo("R00001");
 		this.r0.setFechaEntrada(LocalDate.of(2022, 6, 1));
 		this.r0.setFechaSalida(LocalDate.of(2022, 6, 5));
+		this.r0.setPeregrinos(this.listaPeregrinos);
 
 		this.r1 = new Reserva();
 		this.r1.setCodigo("R00002");
 		this.r1.setFechaEntrada(LocalDate.of(2022, 6, 1));
 		this.r1.setFechaSalida(LocalDate.of(2022, 6, 3));
-		this.r1.setPeregrinos(this.listaPeregrinos);
+		this.r1.setPeregrinos(this.listaPeregrinos1);
 
 		this.r2 = new Reserva();
 		this.r2.setCodigo("R00003");
@@ -167,8 +191,9 @@ public class ProductorDatosPrueba {
 		this.crearReservasSueltas();
 		
 		this.a0.anadirReserva(this.r0);
-		this.a0.anadirReserva(this.r2);
 		this.a1.anadirReserva(this.r1);
+		this.a0.anadirReserva(this.r2);
+	
 
 	}
 
