@@ -5,14 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-@NamedQueries ({
+/*@NamedQueries ({
 	@NamedQuery (name="Peregrino.obtenerPeregrinosReservaEnFechaAlbergue",
 				 query="SELECT p FROM Reserva r" +
                        "JOIN t_reservas_peregrinos rp ON rp.reserva_id=:id" +
                        "JOIN Peregrino p ON p.id=:rp.peregrinos_id" + 
                        "JOIN Albergue a ON r.fk_albergue_reserva=:a.id" + 
                        "WHERE (dia BETWEEN fechaentrada AND fechasalida) AND (a.nombre=:nombre")
-})
+})*/
 
 @Entity
 public class Peregrino extends Persona {
