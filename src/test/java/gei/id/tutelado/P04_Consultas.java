@@ -9,8 +9,6 @@ import gei.id.tutelado.dao.PersonaDaoJPA;
 import gei.id.tutelado.dao.ReservaDao;
 import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Reserva;
-import gei.id.tutelado.model.Empleado;
-import gei.id.tutelado.model.Peregrino;
 import gei.id.tutelado.model.Albergue;
 
 //import org.apache.log4j.Logger;
@@ -94,64 +92,9 @@ public class P04_Consultas {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
-    /* -------- NO VA LA QUERY
+
     @Test
     public void test06_1LeftJoin() {
-        
-        List<Peregrino> listaPeregrinosDia;
-
-        log.info("");	
-		log.info("Configurando situación de partida del test -----------------------------------------------------------------------");
-
-
-        productorDatos.crearPeregrinosSueltos();
-        productorDatos.grabarPersonas();
-        productorDatos.crearAlbergueconReservas();
-    	productorDatos.grabarAlbergues();
-
-    	log.info("");	
-		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de consulta ... \n");   
-
-        listaPeregrinosDia = personaDao.
-    	
-    } 	
-    */
-    
-    @Test
-    public void test06_2OuterJoin() {
-
-        List<Albergue> listaAlbergueVacio;
-
-        log.info("");	
-		log.info("Configurando situación de partida del test -----------------------------------------------------------------------");
-
-		productorDatos.crearAlbergueconReservas();
-    	productorDatos.grabarAlbergues();
- 	
-    	log.info("");	
-		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de consulta Albergue.obtenerAlberguesSinReservas()\n");   
-
-        //Hay dos Albergues (a2, a3) que no tienen todavia ninguna reseva asociada
-        listaAlbergueVacio = albergueDao.obtenerAlberguesSinReservas();
-        
-        /*
-         * Comparamos el CRU del albergue porque al tener la coleccion de servicios con estrategia LAZY y no tener
-         * un metodo para recuperarla, no se trae el objeto "real", asi que compramos por su clave natural.
-         */
-        Assert.assertEquals(2, listaAlbergueVacio.size());
-        Assert.assertEquals(productorDatos.a2.getCru(), listaAlbergueVacio.get(0).getCru());
-        Assert.assertEquals(productorDatos.a3.getCru(), listaAlbergueVacio.get(1).getCru());
-
-    } 		
-    
-    /*
-     * VER QUE HACER, Funciona pero no es una subconsulta
-     */
-    @Test
-    public void test06_3SubconsultaQuenoEs() {
 
         List<Reserva> listaReservasresultado;
 
@@ -164,13 +107,62 @@ public class P04_Consultas {
  	
     	log.info("");	
 		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de consulta ... \n");   
+    	log.info("Objetivo: Prueba de consulta Reserva.obtenerReservasGrupales() \n");   
 
-        //La reserva (r0) es la unica que cuenta con un grupo de peregrinos
+        //Las reservas (r0, r2) cuantan con grupos de peregrinos (mas de 2 personas)
         listaReservasresultado = reservaDao.obtenerReservasGrupales();
 
-        Assert.assertEquals(1, listaReservasresultado.size());
+        Assert.assertEquals(2, listaReservasresultado.size());
         Assert.assertEquals(productorDatos.r0, listaReservasresultado.get(0));
+        Assert.assertEquals(productorDatos.r2, listaReservasresultado.get(1));
+
+    } 
+    
+    @Test
+    public void test06_2OuterJoin() {
+
+        List<Albergue> listaAlbergueVacio;
+
+        log.info("");	
+		log.info("Configurando situación de partida del test -----------------------------------------------------------------------");
+
+        productorDatos.crearPeregrinosSueltos();
+		productorDatos.crearAlbergueconReservas();
+    	productorDatos.grabarAlbergues();
+ 	
+    	log.info("");	
+		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
+    	log.info("Objetivo: Prueba de consulta Albergue.obtenerAlberguesSinReservas()\n");   
+
+        //Hay dos Albergues (a2, a3) que no tienen todavia ninguna reseva asociada
+        listaAlbergueVacio = albergueDao.obtenerAlberguesSinReservas();
+        
+        Assert.assertEquals(2, listaAlbergueVacio.size());
+        Assert.assertEquals(productorDatos.a2, listaAlbergueVacio.get(0));
+        Assert.assertEquals(productorDatos.a3, listaAlbergueVacio.get(1));
+
+    } 
+
+    @Test
+    public void test06_3Subconsulta() {
+
+        Reserva reservaResultado;
+
+    	log.info("");	
+		log.info("Configurando situación de partida del test -----------------------------------------------------------------------");
+        
+        productorDatos.crearPeregrinosSueltos();
+        productorDatos.crearAlbergueconReservas();
+    	productorDatos.grabarAlbergues();
+ 	
+    	log.info("");	
+		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
+    	log.info("Objetivo: Prueba de consulta Reserva.obtenerReservaMayorGrupoPeregrinos() \n");   
+
+        //La reserva (r2) cuenta con el grupo mas numeroso de un total de 3 peregrinos
+        reservaResultado= reservaDao.obtenerReservaMayorGrupoPeregrinos();
+
+        Assert.assertEquals(productorDatos.r2, reservaResultado);
 
     } 	
     
@@ -187,7 +179,7 @@ public class P04_Consultas {
  	
     	log.info("");	
 		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de consulta ALbergue.obtenerAlbergueDisponiblePorCamino() \n");   
+    	log.info("Objetivo: Prueba de consulta Albergue.obtenerAlbergueDisponiblePorCamino() \n");   
 
         //Obtener numero de Albergue del Camino Ingles (1)
     	numeroAlbergues = albergueDao.obtenerAlbergueDisponiblePorCamino("Camino Inglés");

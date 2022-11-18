@@ -20,8 +20,8 @@ public class ProductorDatosPrueba {
 	public Empleado e0, e1;
 	public List<Empleado> listaEmpleados;
 
-	public Peregrino p0,p1;
-	public Set<Peregrino> listaPeregrinos, listaPeregrinos1;
+	public Peregrino p0, p1, p2;
+	public Set<Peregrino> listaPeregrinos, listaPeregrinos1, listaPeregrinos3;
 
 	public Albergue a0, a1, a2, a3;
 	public List<Albergue> listaAlbergues;
@@ -88,12 +88,27 @@ public class ProductorDatosPrueba {
 		this.p1.setMedio("A caballo");
 		this.p1.setLimitacionFisica(true);
 
+		this.p2 = new Peregrino();
+        this.p2.setNif("49474298V");
+        this.p2.setNombre("Alberto");
+        this.p2.setApellido("Vázquez");
+        this.p2.setNacionalidad("Española");
+		this.p2.setTelefono("6981574889");
+		this.p2.setEmail("albertv@gmail.com");
+		this.p2.setMedio("A pie");
+		this.p2.setLimitacionFisica(false);
+
         this.listaPeregrinos = new HashSet<Peregrino> ();
         this.listaPeregrinos.add(this.p0);
         this.listaPeregrinos.add(this.p1);       
 		
 		this.listaPeregrinos1 = new HashSet<Peregrino> ();
         this.listaPeregrinos1.add(this.p0);
+
+		this.listaPeregrinos3 = new HashSet<Peregrino> ();
+        this.listaPeregrinos3.add(this.p0);
+        this.listaPeregrinos3.add(this.p1);   
+		this.listaPeregrinos3.add(this.p2);  
 
 	}
 
@@ -177,6 +192,7 @@ public class ProductorDatosPrueba {
 		this.r2.setCodigo("R00003");
 		this.r2.setFechaEntrada(LocalDate.of(2022, 8, 8));
 		this.r2.setFechaSalida(LocalDate.of(2022, 8, 11));
+		this.r2.setPeregrinos(this.listaPeregrinos3);
 		
         this.listaReservas = new ArrayList<Reserva>();
         this.listaReservas.add(0,this.r0);
@@ -191,10 +207,9 @@ public class ProductorDatosPrueba {
 		this.crearReservasSueltas();
 		
 		this.a0.anadirReserva(this.r0);
-		this.a1.anadirReserva(this.r1);
 		this.a0.anadirReserva(this.r2);
+		this.a1.anadirReserva(this.r1);
 	
-
 	}
 
 	public void grabarPersonas() {
