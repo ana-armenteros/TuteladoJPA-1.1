@@ -140,7 +140,6 @@ public class AlbergueDaoJPA implements AlbergueDao {
 		return albergues;
 	}
 
-	/* 
 	@Override
 	public List<Albergue> obtenerAlberguesSinReservas() {
 		List <Albergue> albergues=null;
@@ -164,8 +163,7 @@ public class AlbergueDaoJPA implements AlbergueDao {
 		}
 
 		return albergues;
-	}
-	*/
+	}	
 
 	@Override
 	public Albergue restauraReservas(Albergue albergue) {

@@ -16,9 +16,9 @@ public interface AlbergueDao {
 	Albergue recuperaPorCru (String cru);
 
 	//Queries para las consultas (2.OuterJoin y 4.Funcion Agrupacion)
+	List<Albergue> obtenerAlberguesSinReservas ();
 	Long obtenerAlbergueDisponiblePorCamino (String camino);
-	//List<Albergue> obtenerAlberguesSinReservas ();
-
+	
 	/* 
 		Operaciones por atributos LAZY
 		- Recibe un Albergue con la coleccion de Reservas como proxy SIN INICIALIZAR

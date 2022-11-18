@@ -18,10 +18,9 @@ initialValue=0, allocationSize=1)
     @NamedQuery (name="Albergue.recuperaTodos",
 				 query="SELECT a FROM Albergue a ORDER BY a.cru"),
 	@NamedQuery (name="Albergue.obtenerAlbergueDisponiblePorCamino",
-				 query="SELECT COUNT(id) FROM Albergue a WHERE a.camino=:camino AND a.disponible=TRUE")
-	/*@NamedQuery (name="Albergue.obtenerAlberguesSinReservas",
-				 query="SELECT a FROM Reserva r RIGHT JOIN Albergue a ON r.fk_albergue_reserva=:a.id WHERE r.id IS NULL")
-*/
+				 query="SELECT COUNT(id) FROM Albergue a WHERE a.camino=:camino AND a.disponible=TRUE"),
+	@NamedQuery (name="Albergue.obtenerAlberguesSinReservas",
+				 query="SELECT a FROM Albergue a LEFT OUTER JOIN a.reservas r WHERE r IS NULL ORDER BY a.cru ASC")
     })
 
 @Entity

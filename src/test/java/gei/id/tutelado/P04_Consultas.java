@@ -119,7 +119,6 @@ public class P04_Consultas {
     } 	
     */
     
-    /* -----------NO VA LA QUERY
     @Test
     public void test06_2OuterJoin() {
 
@@ -133,17 +132,20 @@ public class P04_Consultas {
  	
     	log.info("");	
 		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de consulta ... \n");   
+    	log.info("Objetivo: Prueba de consulta Albergue.obtenerAlberguesSinReservas()\n");   
 
         //Hay dos Albergues (a2, a3) que no tienen todavia ninguna reseva asociada
         listaAlbergueVacio = albergueDao.obtenerAlberguesSinReservas();
         
+        /*
+         * Comparamos el CRU del albergue porque al tener la coleccion de servicios con estrategia LAZY y no tener
+         * un metodo para recuperarla, no se trae el objeto "real", asi que compramos por su clave natural.
+         */
         Assert.assertEquals(2, listaAlbergueVacio.size());
-        Assert.assertEquals(productorDatos.a2, listaAlbergueVacio.get(0));
-        Assert.assertEquals(productorDatos.a3, listaAlbergueVacio.get(1));
+        Assert.assertEquals(productorDatos.a2.getCru(), listaAlbergueVacio.get(0).getCru());
+        Assert.assertEquals(productorDatos.a3.getCru(), listaAlbergueVacio.get(1).getCru());
 
     } 		
-    */
     
     /*
      * VER QUE HACER, Funciona pero no es una subconsulta
@@ -185,7 +187,7 @@ public class P04_Consultas {
  	
     	log.info("");	
 		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de consulta ... \n");   
+    	log.info("Objetivo: Prueba de consulta ALbergue.obtenerAlbergueDisponiblePorCamino() \n");   
 
         //Obtener numero de Albergue del Camino Ingles (1)
     	numeroAlbergues = albergueDao.obtenerAlbergueDisponiblePorCamino("Camino Inglés");
