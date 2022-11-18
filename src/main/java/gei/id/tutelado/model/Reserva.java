@@ -17,8 +17,9 @@ initialValue=0, allocationSize=1)
     @NamedQuery (name="Reserva.recuperaTodos",
 				 query="SELECT r FROM Reserva r ORDER BY r.codigo"),
 	@NamedQuery (name="Reserva.obtenerReservasGrupales",
-				 //query="SELECT r FROM Reserva r WHERE ((SELECT count(*) FROM Peregrino) > 1)")
-                 query="SELECT DISTINCT r FROM Reserva r INNER JOIN r.peregrinos p WHERE size(p) > 1")
+                 query="SELECT DISTINCT r FROM Reserva r INNER JOIN r.peregrinos p WHERE size(p) > 1"),
+    @NamedQuery (name="Reserva.obtenerReservaMayorGrupoPeregrinos",
+                 query="SELECT r FROM Reserva r INNER JOIN r.peregrinos p WHERE size(p) = (SELECT MAX(size(p)) FROM Reserva r INNER JOIN r.peregrinos p)")
 })
 
 @Entity
@@ -127,13 +128,6 @@ public class Reserva implements Comparable<Reserva>{
 			return false;
 		return true;
 	}
-
-    @Override
-    public String toString() {
-        return "[id=" + id + ", codigo=" + codigo + ", fechaEntrada=" +
-            fechaEntrada + ", fechaSalida=" + fechaSalida +
-            ", albergue=" + albergue + ", peregrinos=" + peregrinos + "]";
-    }
 
     @Override
 	public int compareTo(Reserva other) {

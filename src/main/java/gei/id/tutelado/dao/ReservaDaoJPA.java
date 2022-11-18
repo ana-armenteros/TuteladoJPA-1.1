@@ -135,6 +135,30 @@ public class ReservaDaoJPA implements ReservaDao {
 		return reservas;
 	}
 
+	@Override
+	public Reserva obtenerReservaMayorGrupoPeregrinos() {
+		Reserva reserva=null;
+
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			reserva = em.createNamedQuery("Reserva.obtenerReservaMayorGrupoPeregrinos", Reserva.class).getSingleResult(); 
+
+			em.getTransaction().commit();
+			em.close();	
+
+		}
+		catch (Exception ex ) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw(ex);
+			}
+		}
+
+		return reserva;
+	}
 
 }
 
