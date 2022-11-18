@@ -15,6 +15,7 @@ public interface ReservaDao {
 	void elimina (Reserva reserva);
 	Reserva recuperaPorCodigo (String codigo);
 
-	//Queries para la consulta (3.Subconsulta) que no es subconsulta
+	//Queries para la consulta (1.LeftJoin y 3.Subconsulta) que no es subconsulta
 	List<Reserva> obtenerReservasGrupales ();
+	Reserva obtenerReservaMayorGrupoPeregrinos();
 }
