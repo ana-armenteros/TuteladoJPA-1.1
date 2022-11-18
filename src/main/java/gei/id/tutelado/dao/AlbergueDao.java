@@ -15,7 +15,7 @@ public interface AlbergueDao {
 	void elimina (Albergue albergue);
 	Albergue recuperaPorCru (String cru);
 
-	//Queries para las consultas (2.OuterJoin y 4.Funcion Agrupacion)
+	//Queries para las consultas (2.OuterJoin y 4.Funcion Agregacion)
 	List<Albergue> obtenerAlberguesSinReservas ();
 	Long obtenerAlbergueDisponiblePorCamino (String camino);
 	
