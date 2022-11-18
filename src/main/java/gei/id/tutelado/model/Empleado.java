@@ -58,9 +58,4 @@ public class Empleado extends Persona {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "is a Empleado [nss=" + nss + ", puesto=" + puesto + "]";
-    }
-
 }

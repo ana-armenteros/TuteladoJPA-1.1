@@ -178,11 +178,4 @@ public class Albergue {
 		return true;
 	}
 
-    @Override
-    public String toString() {
-        return "Albergue [id=" + id + ", cru=" + cru + ", nombre=" + nombre +
-         ", poblacion=" + poblacion + ", camino=" + camino + ", etapa=" + etapa + 
-         ", disponible=" + disponible + ", servicios=" + servicios + ", reservas=" + reservas + "]";
-    }
-
 }

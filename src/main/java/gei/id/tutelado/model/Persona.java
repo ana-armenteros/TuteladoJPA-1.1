@@ -124,12 +124,4 @@ public abstract class Persona {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Persona [id=" + id + ", nif=" + nif + ", nombre=" + nombre +
-			", apellido=" + apellido + ", nacionalidad=" + nacionalidad + 
-			", telefono=" + telefono + "email=" + email + "]";
-	}
-
-
 }
