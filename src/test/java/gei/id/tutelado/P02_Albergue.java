@@ -9,7 +9,6 @@ import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Albergue;
 import gei.id.tutelado.model.Reserva;
 
-//import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -115,11 +114,12 @@ public class P02_Albergue {
     	Assert.assertEquals(productorDatos.a0.getEtapa(), a0prueba.getEtapa());
     	Assert.assertEquals(productorDatos.a0.getDisponible(), a0prueba.getDisponible());
     	/*
-		 * Como la coleccion de servicios, tiene la asociacion definiada con estrategia tipo LAZY
+		 * Como la coleccion de servicios, tiene la asociacion definida con estrategia tipo LAZY
 		 * no podemos recuperar los objetos como tal, por lo que al intenta recuperarlo saltaria 
 		 * una excepcion tipo LazyInitializationException
+		 * 
+		 * Assert.assertEquals(productorDatos.a0.getServicios(), a0prueba.getServicios());
 		 */
-		//Assert.assertEquals(productorDatos.a0.getServicios(), a0prueba.getServicios());
 
     	log.info("");	
 		log.info("Probando recuperacion por CRU INEXISTENTE de Albergue -----------------------------------------------");

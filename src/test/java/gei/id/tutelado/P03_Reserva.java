@@ -8,7 +8,6 @@ import gei.id.tutelado.dao.ReservaDao;
 import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Reserva;
 
-//import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -246,50 +245,4 @@ public class P03_Reserva{
 		Assert.assertNotNull(productorDatos.p1.getId());
 
     } 
-
-    /* 
-    @Test
-    public void test09_Excepcions() {
-    	
-    	Boolean excepcion;
-    	
-    	log.info("");	
-		log.info("Configurando situación de partida del test -----------------------------------------------------------------------");
-
-		productorDatos.crearAlberguesSueltos();
-    	albergueDao.almacena(productorDatos.a0);
-    	
-    	log.info("");	
-		log.info("Inicio del test --------------------------------------------------------------------------------------------------");
-    	log.info("Objetivo: Prueba de violación de restricciones not null y unique\n"   
-    			+ "\t\t\t\t Casos contemplados:\n"
-    			+ "\t\t\t\t a) Guardado de Albergue con CRU duplicado\n"
-    			+ "\t\t\t\t b) Guardado de Albergue con CRU nulo\n");
-    	
-		log.info("Probando Guardado de Albergue con CRU duplicado -----------------------------------------------");
-    	productorDatos.a1.setCru(productorDatos.a0.getCru());
-    	try {
-        	albergueDao.almacena(productorDatos.a1);
-        	excepcion=false;
-    	} catch (Exception ex) {
-    		excepcion=true;
-    		log.info(ex.getClass().getName());
-    	}
-    	Assert.assertTrue(excepcion);
-    	
-    	log.info("");	
-		log.info("Probando Guardado de Albergue con CRU nulo ----------------------------------------------------");
-    	productorDatos.a1.setCru(null);
-    	try {
-        	albergueDao.almacena(productorDatos.a1);
-        	excepcion=false;
-    	} catch (Exception ex) {
-    		excepcion=true;
-    		log.info(ex.getClass().getName());
-    	}
-    	Assert.assertTrue(excepcion);
-
-		
-    } 	
-	*/
 }

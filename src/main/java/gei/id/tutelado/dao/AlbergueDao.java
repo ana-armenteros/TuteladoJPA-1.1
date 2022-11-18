@@ -17,12 +17,12 @@ public interface AlbergueDao {
 
 	//Queries para las consultas (2.OuterJoin y 4.Funcion Agregacion)
 	List<Albergue> obtenerAlberguesSinReservas ();
-	Long obtenerAlbergueDisponiblePorCamino (String camino);
+	int obtenerAlbergueDisponiblePorCamino (String camino);
 	
 	/* 
 		Operaciones por atributos LAZY
 		- Recibe un Albergue con la coleccion de Reservas como proxy SIN INICIALIZAR
-		- Devuelve una copia del Albergergue con la coleccion de Reservas INICIALIZADA
+		- Devuelve una copia del Albergue con la coleccion de Reservas INICIALIZADA
 	*/
 	Albergue restauraReservas (Albergue albergue);
 

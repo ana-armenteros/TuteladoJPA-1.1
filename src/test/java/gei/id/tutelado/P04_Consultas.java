@@ -11,7 +11,6 @@ import gei.id.tutelado.dao.ReservaDaoJPA;
 import gei.id.tutelado.model.Reserva;
 import gei.id.tutelado.model.Albergue;
 
-//import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -169,7 +168,7 @@ public class P04_Consultas {
 	@Test
     public void test06_4FuncionAgregacion() {
         
-        Long numeroAlbergues;
+        int numeroAlbergues;
 
     	log.info("");	
 		log.info("Configurando situación de partida del test -----------------------------------------------------------------------");
@@ -183,15 +182,15 @@ public class P04_Consultas {
 
         //Obtener numero de Albergue del Camino Ingles (1)
     	numeroAlbergues = albergueDao.obtenerAlbergueDisponiblePorCamino("Camino Inglés");
-        Assert.assertEquals(Long.valueOf(1), numeroAlbergues);
+        Assert.assertEquals(1, numeroAlbergues);
 
         //Obtener numero de ALbergues del Camino Frances (2) ya que uno no esta disponible
         numeroAlbergues = albergueDao.obtenerAlbergueDisponiblePorCamino("Camino Francés");
-        Assert.assertEquals(Long.valueOf(2), numeroAlbergues);
+        Assert.assertEquals(2, numeroAlbergues);
 
         //Obtener ningun albergue del Camino Primitivo
         numeroAlbergues = albergueDao.obtenerAlbergueDisponiblePorCamino("Camino Primitivo");
-        Assert.assertEquals(Long.valueOf(0), numeroAlbergues);
+        Assert.assertEquals(0, numeroAlbergues);
 
     } 	
     

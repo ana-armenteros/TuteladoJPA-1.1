@@ -16,7 +16,7 @@ import gei.id.tutelado.model.*;
 public class ProductorDatosPrueba {	
 	private EntityManagerFactory emf=null;
 	
-	//Lista de conjunto de objetos que se van a utilizar en los casos de preuba
+	//Lista de conjunto de objetos que se van a utilizar en los casos de prueba
 	public Empleado e0, e1;
 	public List<Empleado> listaEmpleados;
 
@@ -252,7 +252,6 @@ public class ProductorDatosPrueba {
 				Albergue alb = itAlb.next();
 				em.persist(alb);
 
-				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
 				Iterator<Reserva> itRes = alb.getReservas().iterator();
 				while (itRes.hasNext()) {
 					em.persist(itRes.next());

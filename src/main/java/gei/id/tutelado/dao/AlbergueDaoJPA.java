@@ -113,9 +113,9 @@ public class AlbergueDaoJPA implements AlbergueDao {
 	}
 
 	@Override
-	public Long obtenerAlbergueDisponiblePorCamino(String camino) {
+	public int obtenerAlbergueDisponiblePorCamino(String camino) {
 
-		Long albergues= new Long(0);
+		int albergues= 0;
 
 		try {
 			em = emf.createEntityManager();
@@ -123,7 +123,7 @@ public class AlbergueDaoJPA implements AlbergueDao {
 
 			albergues = em.createNamedQuery("Albergue.obtenerAlbergueDisponiblePorCamino", Long.class)
 						.setParameter("camino", camino)
-						.getSingleResult().longValue(); 
+						.getSingleResult().intValue(); 
 
 			em.getTransaction().commit();
 			em.close();	

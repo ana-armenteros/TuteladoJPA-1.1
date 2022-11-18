@@ -59,7 +59,7 @@ public class Albergue {
 		- Si se borra un albergue, deberán borrarse las reservas asociadas al mismo.
 
         Lado INVERSO de la asociacion
-        -Dentro del mappedBy() nombe del atributo de la clase propietaria (Albergue)
+        -Dentro del mappedBy() nombre del atributo de la clase propietaria (Albergue)
 
         NOTA: necesitamos el @OrderBy aunque la coleccion esté definida como LAZY por si en 
         algun momento accedemos a la propiedad DENTRO de sesión, por defecto orden ASC

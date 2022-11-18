@@ -7,7 +7,6 @@ import gei.id.tutelado.dao.PersonaDaoJPA;
 import gei.id.tutelado.model.Empleado;
 import gei.id.tutelado.model.Peregrino;
 
-//import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
